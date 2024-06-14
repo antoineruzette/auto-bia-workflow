@@ -1,13 +1,12 @@
 [![License](https://img.shields.io/pypi/l/microsim.svg?color=green)](https://github.com/antoineruzette/auto-bia-workflow/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/auto-bia-workflow.svg?color=green)](https://pypi.org/project/auto-bia-workflow/)
 [![Python Version](https://img.shields.io/pypi/pyversions/auto-bia-workflow.svg?color=green)](https://python.org)
-[![Downloads](https://pepy.tech/badge/auto-bia-workflow)](https://pepy.tech/project/auto-bia-workflow)
-[![Build Status](https://travis-ci.com/antoineruzette/auto-bia-workflow.svg?branch=main)](https://travis-ci.com/antoineruzette/auto-bia-workflow)
-[![Coverage Status](https://coveralls.io/repos/github/antoineruzette/auto-bia-workflow/badge.svg?branch=main)](https://coveralls.io/github/antoineruzette/auto-bia-workflow?branch=main
 
 # AutoBIA
 
-AutoBIA is a Python library to optimize image analysis workflows. It allows users to create and apply various image processing operators in a sequential manner, and optimize the parameters of these operators to achieve the best results. 
+Optimize image analysis workflows with AutoBIA.
+
+AutoBIA allows users to create and apply various image processing operators in a sequential manner, and optimize their parameters to achieve best results in various tasks - for now focusing on segmentation. 
 
 ## Installation
 

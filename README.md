@@ -1,10 +1,9 @@
-[![CC BY 4.0][cc-by-shield]][cc-by]
-
-This work is licensed under a
-[Creative Commons Attribution 4.0 International License][cc-by].
-
-[cc-by]: http://creativecommons.org/licenses/by/4.0/
-[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
+[![License](https://img.shields.io/pypi/l/microsim.svg?color=green)](https://github.com/antoineruzette/auto-bia-workflow/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/auto-bia-workflow.svg?color=green)](https://pypi.org/project/auto-bia-workflow/)
+[![Python Version](https://img.shields.io/pypi/pyversions/auto-bia-workflow.svg?color=green)](https://python.org)
+[![Downloads](https://pepy.tech/badge/auto-bia-workflow)](https://pepy.tech/project/auto-bia-workflow)
+[![Build Status](https://travis-ci.com/antoineruzette/auto-bia-workflow.svg?branch=main)](https://travis-ci.com/antoineruzette/auto-bia-workflow)
+[![Coverage Status](https://coveralls.io/repos/github/antoineruzette/auto-bia-workflow/badge.svg?branch=main)](https://coveralls.io/github/antoineruzette/auto-bia-workflow?branch=main
 
 # AutoBIA
 
@@ -21,33 +20,32 @@ The library is not stable at this point and new features are added regularly. Fo
 2. **Install the dependencies**: Install the dependencies using pip.
 
     ```bash
-pip install -r requirements.txt
+    pip install -r requirements.txt
     ```
 3. **Install the package**: Install the package using pip.
 
     ```bash
-pip install dist/auto_bia-0.1-py3-none-any.whl
+    pip install dist/auto_bia-0.1-py3-none-any.whl
     ```
 
 ## Usage
 Construct a workflow by adding operators and setting their initial parameters, then optimize workflow using the `optimize` method. The `optimize` method uses a gradient descent algorithm to find the best parameters for the operators in the workflow.
 
 ```python
+
 from auto_bia import bia_workflow as biaw
 
 # Create an image analysis workflow
 workflow = biaw.ImageAnalysisWorkflow()
+# Add operators to the workflow
 workflow.add_operator(biaw.SmoothingOperator(kernel_size=5))
 workflow.add_operator(biaw.SegmentationOperator(threshold=30))
+# Set optimization parameters
 workflow.set_cutoff(0.95)
 
-# Run the workflow
+# Run it
 image_path = "/tests/images/original.png"
 mask_path = "/tests/images/mask.png"
 result_save_path = "/tests/images/result.png"
-result_image, best_combination, best_score = workflow.run(image_path, 
-                                                          mask_path, 
-                                                          result_save_path)
-
-
+workflow.run(image_path, mask_path, result_save_path)
 ```

@@ -1,2 +1,2 @@
-from .bia_operators import * 
-from .bia_workflow import * 
+from auto_bia import bia_operator
+from auto_bia import bia_workflow

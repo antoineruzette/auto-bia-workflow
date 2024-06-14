@@ -1,24 +1,20 @@
-import os
-os.chdir("/Users/antoine/Harvard/IAC/auto-bia-workflow/auto_bia")
-
-from auto_bia.bia_operator import ImageLoadingOperator, SmoothingOperator, SegmentationOperator, ImageOperator
-from auto_bia.bia_workflow import ImageAnalysisWorkflow
-
-# Create image processing operators
-loading_op = ImageLoadingOperator('images/Ch0050.png')
-smoothing_op = SmoothingOperator("Gaussian Blur", kernel_size=5)
-segmentation_op = SegmentationOperator("Thresholding", threshold=1)
+"""import os
+import sys
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+"""
+from auto_bia import bia_workflow as biaw
 
 # Create an image analysis workflow
-workflow = ImageAnalysisWorkflow()
-workflow.add_operator(loading_op)
-workflow.add_operator(smoothing_op)
-workflow.add_operator(segmentation_op)
+workflow = biaw.ImageAnalysisWorkflow()
+workflow.add_operator(biaw.SmoothingOperator(kernel_size=5))
+workflow.add_operator(biaw.SegmentationOperator(threshold=30))
+workflow.set_cutoff(0.95)
 
-# Apply the workflow to the image
-result_image = workflow.run_workflow()
-
-'''# Display the result
-cv2.imshow("Result Image", result_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()'''
+# Run the workflow
+image_path = "/Users/antoine/Harvard/IAC/auto-bia-workflow/tests/images/original.png"
+mask_path = "/Users/antoine/Harvard/IAC/auto-bia-workflow/tests/images/mask.png"
+result_save_path = "/Users/antoine/Harvard/IAC/auto-bia-workflow/tests/images/result.png"
+result_image, best_combination, best_score = workflow.run(image_path, 
+                                                          mask_path, 
+                                                          result_save_path)

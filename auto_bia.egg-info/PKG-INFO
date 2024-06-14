@@ -1,0 +1,103 @@
+Metadata-Version: 2.1
+Name: auto-bia
+Version: 0.1
+Summary: Goo lets you simulate cells with Blender
+Home-page: https://github.com/smegason/Goo/
+Author: Sean Megason, Antoine A. Ruzette
+Author-email: megason@hms.harvard.edu
+License: BSD-2-Clause
+Project-URL: Documentation, https://smegason.github.io/Goo/docs/
+Project-URL: GitHub Project, https://github.com/smegason/Goo
+Project-URL: Issue Tracker, https://github.com/smegason/Goo/issues
+Classifier: Framework :: Pytest
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: opencv-python
+Provides-Extra: dev
+Requires-Dist: black==20.8b1; extra == "dev"
+Requires-Dist: bump2version==1.0.1; extra == "dev"
+Requires-Dist: flake8==3.9.2; extra == "dev"
+Requires-Dist: flake8-implicit-str-concat==0.2.0; extra == "dev"
+Requires-Dist: flake8-print==4.0.0; extra == "dev"
+Requires-Dist: isort==5.9.1; extra == "dev"
+Requires-Dist: pre-commit==2.13.0; extra == "dev"
+Requires-Dist: yamllint==1.26.1; extra == "dev"
+Provides-Extra: lint
+Requires-Dist: black==20.8b1; extra == "lint"
+Requires-Dist: flake8==3.9.2; extra == "lint"
+Requires-Dist: flake8-implicit-str-concat==0.2.0; extra == "lint"
+Requires-Dist: flake8-print==4.0.0; extra == "lint"
+Requires-Dist: isort==5.9.1; extra == "lint"
+Requires-Dist: yamllint==1.26.1; extra == "lint"
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+
+[![CC BY 4.0][cc-by-shield]][cc-by]
+
+This work is licensed under a
+[Creative Commons Attribution 4.0 International License][cc-by].
+
+[cc-by]: http://creativecommons.org/licenses/by/4.0/
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
+
+# AutoBIA
+
+AutoBIA is a Python library to optimize image analysis workflows. It allows users to create and apply various image processing operators in a sequential manner, and optimize the parameters of these operators to achieve the best results. 
+
+## Installation
+
+1. **Clone the repository**: Clone this repository to your local machine using Git.
+The library is not stable at this point and new features are added regularly. For now, the best way to install the library is to clone the repository and locally install the package using pip.
+
+    ```bash
+    git clone https://github.com/antoineruzette/auto-bia-workflow.git
+    ```
+2. **Install the dependencies**: Install the dependencies using pip.
+
+    ```bash
+pip install -r requirements.txt
+    ```
+3. **Install the package**: Install the package using pip.
+
+    ```bash
+pip install dist/auto_bia-0.1-py3-none-any.whl
+    ```
+
+## Usage
+Construct a workflow by adding operators and setting their initial parameters, then optimize workflow using the `optimize` method. The `optimize` method uses a gradient descent algorithm to find the best parameters for the operators in the workflow.
+
+```python
+import os
+import sys
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from auto_bia.bia_operator import ImageLoadingOperator, SmoothingOperator, SegmentationOperator, EqualizationOperator
+from auto_bia.bia_workflow import ImageAnalysisWorkflow
+from auto_bia.utils import load_image, save_image, compute_similarity
+
+# Create an image analysis workflow
+workflow = ImageAnalysisWorkflow()
+workflow.add_operator(SmoothingOperator(kernel_size=5))
+workflow.add_operator(SegmentationOperator(threshold=30))
+workflow.add_operator(EqualizationOperator(clip_limit=2.0, tile_grid_size=(8, 8)))
+
+# Verify that the image paths are correct
+image_path = "tests/images/original.png"
+mask_path = "tests/images/masks.png"
+output_path = "tests/images/autoBIA_result.png"
+
+# Run the workflow
+workflow.run(image_path, mask_path, output_path)
+
+```

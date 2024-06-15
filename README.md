@@ -4,7 +4,7 @@
 
 # OptiBIA
 
-Optimize image analysis workflows with AutoBIA.
+Optimize image analysis workflows with OptiBIA.
 
 AutoBIA allows users to create and apply various image processing operators in a sequential manner, and optimize their parameters to achieve best results in various tasks - for now focusing on segmentation. 
 

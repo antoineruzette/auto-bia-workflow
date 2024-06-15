@@ -2,7 +2,7 @@
 [![PyPI](https://img.shields.io/pypi/v/auto-bia-workflow.svg?color=green)](https://pypi.org/project/auto-bia-workflow/)
 [![Python Version](https://img.shields.io/pypi/pyversions/auto-bia-workflow.svg?color=green)](https://python.org)
 
-# AutoBIA
+# OptiBIA
 
 Optimize image analysis workflows with AutoBIA.
 

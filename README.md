@@ -19,9 +19,19 @@ The library is not stable at this point and new features are added regularly. Fo
 2. **Install the dependencies**: Install the dependencies using pip.
 
     ```bash
+    conda create -n optiBIA python=3.8
+    ```
+
+    ```bash
     pip install -r requirements.txt
     ```
-3. **Install the package**: Install the package using pip.
+3. **Install optiBIA**: Locally install optiBIA using pip. A future stable version will be available on PyPI.
+
+    To update local changes to the library, run the following command in the root directory: 
+
+    ```bash
+    python setup.py bdist_wheel
+    ```
 
     ```bash
     pip install dist/auto_bia-0.1-py3-none-any.whl

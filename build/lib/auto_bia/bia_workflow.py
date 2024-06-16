@@ -61,6 +61,7 @@ class ImageAnalysisWorkflow:
         if isinstance(image_input, str):
             print(f"Loading image from {image_input}")
             image = load_image(file_path=image_input)
+            print(image.shape)
         elif isinstance(image_input, np.ndarray) and image_input.ndim == 2:
             image = image_input
         else:
@@ -69,6 +70,7 @@ class ImageAnalysisWorkflow:
         if isinstance(mask_input, str):
             print(f"Loading mask from {mask_input}")
             mask = load_image(file_path=mask_input, grayscale=True)
+            print(image.shape)
         elif isinstance(mask_input, np.ndarray) and mask_input.ndim == 2:
             mask = mask_input
         else:

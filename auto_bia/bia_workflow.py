@@ -21,39 +21,47 @@ class ImageAnalysisWorkflow:
         run(image_path, mask_path, result_save_path): Run the workflow on an image.
         optimize(image, mask): Optimize the workflow using gradient descent.
     """
-    def __init__(self):
-        self.operators = [] 
-        self.cutoff = 0.9
-        self.max_iter = 100
-        self.learning_rate = 0.1
+    def __init__(self, operators=None, cutoff=0.9, max_iter=100, learning_rate=0.1):
+        self._operators = operators if operators is not None else []
+        self._cutoff = cutoff
+        self._max_iter = max_iter
+        self._learning_rate = learning_rate
 
-    def get_cutoff(self):
-        return self.cutoff
+    @property
+    def cutoff(self):
+        return self._cutoff
     
-    def set_cutoff(self, cutoff):
-        self.cutoff = cutoff
+    @cutoff.setter
+    def cutoff(self, value):
+        self._cutoff = value
 
-    def get_max_iter(self):
-        return self.max_iter
+    @property
+    def operators(self):
+        return self._operators
     
-    def set_max_iter(self, max_iter):
-        self.max_iter = max_iter
-      
-    def get_learning_rate(self):
-        return self.learning_rate
-  
-    def set_learning_rate(self, learning_rate):
-        self.learning_rate = learning_rate
+    @operators.setter
+    def operators(self, operator):
+        self._operators.append(operator)
 
-    def get_operators(self):
-        return self.operators
+    @property
+    def max_iter(self):
+        return self._max_iter
     
-    def add_operator(self, operator):
-        self.operators.append(operator)
+    @max_iter.setter
+    def max_iter(self, value):
+        self._max_iter = value
+
+    @property
+    def learning_rate(self):
+        return self._learning_rate
+    
+    @learning_rate.setter
+    def learning_rate(self, value):
+        self._learning_rate = value
 
     def apply_operators(self, image):
         result = image.copy()
-        for operator in self.operators:
+        for operator in self._operators:
             result = operator.apply(result)
         return result
     
@@ -61,6 +69,7 @@ class ImageAnalysisWorkflow:
         if isinstance(image_input, str):
             print(f"Loading image from {image_input}")
             image = load_image(file_path=image_input)
+            print(image.shape)
         elif isinstance(image_input, np.ndarray) and image_input.ndim == 2:
             image = image_input
         else:
@@ -69,6 +78,7 @@ class ImageAnalysisWorkflow:
         if isinstance(mask_input, str):
             print(f"Loading mask from {mask_input}")
             mask = load_image(file_path=mask_input, grayscale=True)
+            print(image.shape)
         elif isinstance(mask_input, np.ndarray) and mask_input.ndim == 2:
             mask = mask_input
         else:
@@ -91,10 +101,15 @@ class ImageAnalysisWorkflow:
         for i in range(self.max_iter):
             print(f"Iteration {i + 1}/{self.max_iter}")
 
-            for idx, operator in enumerate(self.operators):
+            for idx, operator in enumerate(self._operators):
                 # Calculate gradient
                 original_params = operator.get_params()
-                gradients = operator.compute_gradients(best_result, mask, self.apply_operators, compute_similarity)
+                gradients = operator.compute_gradients(
+                    best_result, 
+                    mask, 
+                    self.apply_operators, 
+                    compute_similarity
+                    )
 
                 # Update parameters
                 new_params = original_params - self.learning_rate * gradients
@@ -112,7 +127,7 @@ class ImageAnalysisWorkflow:
                 # Check if this is the best score
                 if score > best_score:
                     best_score = score
-                    best_combination = [op.get_params() for op in self.operators]
+                    best_combination = [op.get_params() for op in self._operators]
                     best_result = result.copy()
 
                 # If the score exceeds the cutoff, break
@@ -128,7 +143,7 @@ class ImageAnalysisWorkflow:
                 break
 
         # Set the operators to the best combination found
-        for idx, operator in enumerate(self.operators):
+        for idx, operator in enumerate(self._operators):
             operator.set_params(best_combination[idx])
 
         return best_result, best_combination, best_score

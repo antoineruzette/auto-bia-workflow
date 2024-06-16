@@ -64,6 +64,10 @@ The library is not stable at this point and new features are added regularly. Fo
 2. **Install the dependencies**: Install the dependencies using pip.
 
     ```bash
+    conda create -n optiBIA python=3.10
+    ```
+
+    ```bash
     pip install -r requirements.txt
     ```
 3. **Install the package**: Install the package using pip.

@@ -1,3 +1,4 @@
+import numpy as np
 from auto_bia.utils import load_image, save_image, compute_similarity
 from auto_bia.bia_operator import *
 
@@ -22,7 +23,7 @@ class ImageAnalysisWorkflow:
     """
     def __init__(self):
         self.operators = [] 
-        self.cutoff = 0.93
+        self.cutoff = 0.9
         self.max_iter = 100
         self.learning_rate = 0.1
 
@@ -56,16 +57,22 @@ class ImageAnalysisWorkflow:
             result = operator.apply(result)
         return result
     
-    def run(self, image_path, mask_path, result_save_path=None):
-        print(f"Loading image from {image_path}")
-        image = load_image(file_path=image_path)
-        print(f"Loading mask from {mask_path}")
-        mask = load_image(file_path=mask_path, grayscale=True)
+    def run(self, image_input, mask_input, result_save_path=None):
+        if isinstance(image_input, str):
+            print(f"Loading image from {image_input}")
+            image = load_image(file_path=image_input)
+        elif isinstance(image_input, np.ndarray) and image_input.ndim == 2:
+            image = image_input
+        else:
+            raise ValueError("image_input must be a file path or a 2D numpy array")
         
-        if image is None:
-            raise ValueError(f"Failed to load image from {image_path}")
-        if mask is None:
-            raise ValueError(f"Failed to load mask from {mask_path}")
+        if isinstance(mask_input, str):
+            print(f"Loading mask from {mask_input}")
+            mask = load_image(file_path=mask_input, grayscale=True)
+        elif isinstance(mask_input, np.ndarray) and mask_input.ndim == 2:
+            mask = mask_input
+        else:
+            raise ValueError("mask_input must be a file path or a 2D numpy array")
 
         # Perform gradient descent to optimize the operators' parameters
         best_result, best_combination, best_score = self.optimize(image, mask)

@@ -1,3 +1,4 @@
+LICENSE
 README.md
 setup.cfg
 setup.py
@@ -11,4 +12,6 @@ auto_bia.egg-info/dependency_links.txt
 auto_bia.egg-info/requires.txt
 auto_bia.egg-info/top_level.txt
 tests/__init__.py
-tests/library.py
+tests/test_bia_operator.py
+tests/test_bia_workflow.py
+tests/test_utils.py

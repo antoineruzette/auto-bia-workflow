@@ -6,7 +6,7 @@
 
 Optimize image analysis workflows with OptiBIA.
 
-AutoBIA allows users to create and apply various image processing operators in a sequential manner, and optimize their parameters to achieve best results in various tasks - for now focusing on segmentation. 
+OptiBIA allows users to create and apply various image processing operators in a sequential manner, and optimize their parameters to achieve best results in various tasks - for now focusing on segmentation. 
 
 ## Installation
 
@@ -35,16 +35,22 @@ Construct a workflow by adding operators and setting their initial parameters, t
 from auto_bia import bia_workflow as biaw
 
 # Create an image analysis workflow
-workflow = biaw.ImageAnalysisWorkflow()
-# Add operators to the workflow
-workflow.add_operator(biaw.SmoothingOperator(kernel_size=5))
-workflow.add_operator(biaw.SegmentationOperator(threshold=30))
-# Set optimization parameters
-workflow.set_cutoff(0.95)
+workflow = biaw.ImageAnalysisWorkflow(
+    operators = [
+        biaw.SmoothingOperator(kernel_size=5),
+        biaw.SegmentationOperator(threshold=30)
+        ], 
+    cutoff=0.95, 
+    learning_rate=0.1
+    )
 
 # Run it
 image_path = "/tests/images/original.png"
 mask_path = "/tests/images/mask.png"
 result_save_path = "/tests/images/result.png"
-workflow.run(image_path, mask_path, result_save_path)
+workflow.run(
+    image_input=image_path, 
+    mask_input=mask_path, 
+    result_save_path
+    )
 ```

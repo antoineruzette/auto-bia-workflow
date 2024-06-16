@@ -55,9 +55,9 @@ workflow = biaw.ImageAnalysisWorkflow(
     )
 
 # Run it
-image_path = "/tests/images/original.png"
-mask_path = "/tests/images/mask.png"
-result_save_path = "/tests/images/result.png"
+image_path = "tests/images/original.png"
+mask_path = "tests/images/mask.png"
+result_save_path = "tests/images/result.png"
 workflow.run(
     image_input=image_path, 
     mask_input=mask_path, 

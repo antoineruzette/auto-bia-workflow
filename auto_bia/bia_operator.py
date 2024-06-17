@@ -78,7 +78,7 @@ class SegmentationOperator(ImageOperator):
         ret, segmented_image = cv2.threshold(image, 
                                              self.threshold, 
                                              255, 
-                                             cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+                                             cv2.THRESH_OTSU)
         return segmented_image
     
     def get_params(self):
@@ -100,12 +100,11 @@ class SegmentationOperator(ImageOperator):
         return np.array([gradient])
 
 
-class EqualizationOperator(ImageOperator):
-    def __init__(self, clip_limit=2.0, tile_grid_size=(50, 50)):
-        super().__init__()
+class EqualizationOperator:
+    def __init__(self, clip_limit, tile_grid_size):
         self.clip_limit = clip_limit
-        self.tile_grid_size = tile_grid_size
-    
+        self.tile_grid_size = tuple(map(int, tile_grid_size))  # Ensure tile_grid_size is a tuple of integers
+
     def apply(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clip_limit, 
                                 tileGridSize=self.tile_grid_size)
@@ -133,10 +132,18 @@ class EqualizationOperator(ImageOperator):
         # Compute gradient for tile_grid_size
         gradient_tile_grid_size = []
         for i in range(2):
-            self.tile_grid_size = (self.tile_grid_size[0] + delta, self.tile_grid_size[1]) if i == 0 else (self.tile_grid_size[0], self.tile_grid_size[1] + delta)
+            if i == 0:
+                self.tile_grid_size = (int(self.tile_grid_size[0] + delta), self.tile_grid_size[1])
+            else:
+                self.tile_grid_size = (self.tile_grid_size[0], int(self.tile_grid_size[1] + delta))
+            
             new_image = apply_operators(image)
             new_score = compute_similarity(mask, new_image)
             gradient_tile_grid_size.append((new_score - score) / delta)
-            self.tile_grid_size = (self.tile_grid_size[0] - delta, self.tile_grid_size[1]) if i == 0 else (self.tile_grid_size[0], self.tile_grid_size[1] - delta)
+            
+            if i == 0:
+                self.tile_grid_size = (int(self.tile_grid_size[0] - delta), self.tile_grid_size[1])
+            else:
+                self.tile_grid_size = (self.tile_grid_size[0], int(self.tile_grid_size[1] - delta))
         
         return np.array([gradient_clip_limit, *gradient_tile_grid_size])
